@@ -1,0 +1,91 @@
+---
+title: "Untitled"
+author: "Chenghan Yue"
+date: "4/21/2021"
+output: word_document
+---
+
+```{r}
+library(RMariaDB)
+library(DBI)
+library(dplyr)
+library(odbc)
+library(ggplot2)
+localuserpassword <- "John19970813"
+storiesDb <- dbConnect(RMariaDB::MariaDB(), user='IE 6700 Project User', password=localuserpassword, dbname='book', host='localhost')
+dbListTables(storiesDb)
+dbDisconnect(storiesDb)
+```
+
+
+```{r}
+library(RMariaDB)
+# The connection method below uses a password stored in a settings file.
+
+# R needs a full path to find the settings file.
+rmariadb.settingsfile<-"C:\\IE 6700\\project\\IE_6700_Project.cnf"
+
+rmariadb.db<-"test"
+storiesDb<-dbConnect(RMariaDB::MariaDB(),default.file=rmariadb.settingsfile,group=rmariadb.db)
+
+# list the table. This confirms we connected to the database.
+dbListTables(storiesDb)
+
+# disconnect to clean up the connection to the database.
+dbDisconnect(storiesDb)
+
+```
+
+```{r}
+library(RMariaDB)
+# The connection method below uses a password stored in a settings file.
+
+# R needs a full path to find the settings file.
+rmariadb.settingsfile<-"C:\\IE 6700\\project\\IE_6700_Project.cnf"
+
+rmariadb.db<-"test"
+storiesDb<-dbConnect(RMariaDB::MariaDB(),default.file=rmariadb.settingsfile,group=rmariadb.db)
+
+
+query<-paste("SELECT * FROM book.authorinformation",sep="")
+
+print(query)
+rs = dbSendQuery(storiesDb,query)
+rs
+```
+
+
+```{r}
+authorinformation = read.csv("C:/IE 6700/project/bookauthorid.csv", header = T)
+bookinformation = read.csv("C:/IE 6700/project/bookinforamtion.csv", header = T)
+comment = read.csv("C:/IE 6700/project/bookcomment.csv", header = T)
+puublishinghouse = read.csv("C:/IE 6700/project/bookpublishinghouse.csv", header = T)
+bookcopy = read.csv("C:/IE 6700/project/bookcopy.csv", header = T)
+librarystaff = read.csv("C:/IE 6700/project/librarystaff.csv", header = T)
+libraryrental = read.csv("C:/IE 6700/project/libraryrental.csv", header = T)
+cardinformation = read.csv("C:/IE 6700/project/cardinformation.csv", header = T)
+collegeinformation = read.csv("C:/IE 6700/project/collegeinformation.csv", header = T)
+studentinformation = read.csv("C:/IE 6700/project/studentinformation.csv", header = T)
+booktype = read.csv("C:/IE 6700/project/booktype.csv", header = T)
+```
+
+
+
+```{r}
+data = data.frame(x = c("male", "female"), y = c("8","3"))
+
+bp<- ggplot(data, aes(x="", y= y, fill=x))+ geom_bar(width = 1, stat = "identity")
+(pie <- bp + coord_polar("y", start=0))
+```
+
+
+```{r}
+
+data_type = data.frame(X = c("Comic","Computer Application", "Civil Engineering", "Management", "Novel", "history", "biography"), count = c("3","4", "1", "1", "1", "1", "1" ) )
+
+dtpie<- ggplot(data_type, aes(x="", y= count, fill=X))+ geom_bar(width = 1, stat = "identity")
+(pie <- dtpie + coord_polar("y", start=0))
+
+data_gender_category = data.frame(X = c("Comic","Computer Application", "Civil Engineering", "Management", "Novel", "history", "biography"), count = c("3","4", "1", "1", "1", "1", "1" ), gender = c() )
+ggplot(data_type, aes(fill=X, y=count, x="")) + geom_bar(position="dodge", stat="identity")
+```
